@@ -1,3 +1,19 @@
 .App {
   text-align: center;
 }
+
+.cell {
+  width: 30px;
+  height: 30px;
+  background-color: lightgray;
+}
+
+.box-shadow {
+  box-shadow: 0.5px 0.5px 3px black;
+}
+
+.click:hover {
+  cursor: pointer;
+  box-shadow: none;
+  border: 3px solid black;
+}
