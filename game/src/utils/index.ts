@@ -269,3 +269,9 @@ export const isSafeCellExisting = (board:CellType[][]):boolean => {
   }
   return isExisting;
 }
+
+export const showTimer = (timer:number):string => {
+  let time:string = '';
+
+  return time;
+}
