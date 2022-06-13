@@ -1,5 +1,10 @@
 .App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  height: 100vh;
+  flex-direction: column;
 }
 
 .cell {
