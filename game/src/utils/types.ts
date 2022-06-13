@@ -12,5 +12,5 @@ export type CellType = {
   key:number,
   bombs: number, 
   isFlag?: boolean,
-  isOpened?: boolean,
+  isVisible?: boolean,
 }

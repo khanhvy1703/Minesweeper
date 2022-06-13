@@ -5,7 +5,11 @@
 .cell {
   width: 30px;
   height: 30px;
-  background-color: lightgray;
+  background-color: #7b7b7b;
+}
+
+.cell:active {
+  border: 2px solid grey;
 }
 
 .box-shadow {
@@ -16,4 +20,17 @@
   cursor: pointer;
   box-shadow: none;
   border: 3px solid black;
+}
+
+.bomb-num-container {
+  width: 30px;
+  height: 30px;
+  background-color: #aca9a9;
+  border: 1px solid grey;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

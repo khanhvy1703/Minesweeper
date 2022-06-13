@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
-import { Box, Button, Heading, Text } from '@chakra-ui/react';
+import { Box, Heading, Text } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBomb, faFaceSmile } from '@fortawesome/free-solid-svg-icons';
 import { generateBoard } from '../utils';
-import { INTERMEDIATE_ROW, INTERMEDIATE_COLUMN } from '../utils/constant';
+import {
+  INTERMEDIATE_ROW,
+  INTERMEDIATE_COLUMN,
+  INTERMEDIATE_BOMBS,
+} from '../utils/constant';
 import Cell from './Cell';
 import Num from './Num';
 
 function Game() {
   const [board, setBoard] = useState(
-    generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN)
+    generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS)
   );
+
+  console.log(board)
 
   const renderBoard = (): React.ReactNode => {
     return board.map((row, rowIndex) => {
       return (
-        <Box key={rowIndex} display='flex' flexDirection='row' marginTop='2px'>
+        <Box key={rowIndex} display='flex' flexDirection='row' marginTop='1px'>
           {row.map((column, columnIndex) => {
             return (
-              <Box key={column.key} marginLeft='2px'>
-                <Cell />
+              <Box key={column.key} marginLeft='1px'>
+                <Cell row={rowIndex} col={columnIndex} bombs={column.bombs} isFlag={column.isFlag} isVisible={column.isVisible} />
               </Box>
             );
           })}
