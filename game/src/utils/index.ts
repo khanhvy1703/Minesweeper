@@ -44,7 +44,6 @@ export const generateBoard = (maxRow:number, maxCol:number, maxBomb:number):Cell
       board[i].push({
         key,
         bombs: 0,
-        isVisible: true,
       });
       key++;
     }
@@ -109,4 +108,131 @@ export const generateBoard = (maxRow:number, maxCol:number, maxBomb:number):Cell
     }
   }
   return board;
+}
+
+export const generateAdjacentCells = (row:number, col:number, board:CellType[][]):CellType[][] => {
+  let copyBoard = [...board];
+  const currentCell = board[row][col];
+
+  if (!currentCell.isVisible) {
+    copyBoard[row][col] = {
+      ...currentCell,
+      isVisible: true
+    }
+  }
+
+  const topLeft = getAdjacentCell(row - 1, col - 1, board);
+  const topMid = getAdjacentCell(row - 1, col, board);
+  const topRight = getAdjacentCell(row - 1, col + 1, board);
+  const midLeft = getAdjacentCell(row, col - 1, board);
+  const midRight = getAdjacentCell(row, col + 1, board);
+  const bottomLeft = getAdjacentCell(row + 1, col - 1, board);
+  const bottomMid = getAdjacentCell(row + 1, col, board);
+  const bottomRight = getAdjacentCell(row + 1, col + 1, board);
+
+  if (topLeft) {
+    if (!topLeft.isVisible && topLeft.bombs !== -1) {
+      if (topLeft.bombs === 0) {
+        copyBoard = generateAdjacentCells(row - 1, col - 1, copyBoard);
+      } else {
+        copyBoard[row-1][col-1] = {
+          ...topLeft,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  if (topMid) {
+    if (!topMid.isVisible && topMid.bombs !== -1) {
+      if (topMid.bombs === 0) {
+        copyBoard = generateAdjacentCells(row - 1, col, copyBoard);
+      } else {
+        copyBoard[row-1][col] = {
+          ...topMid,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  if (topRight) {
+    if (!topRight.isVisible && topRight.bombs !== -1) {
+      if (topRight.bombs === 0) {
+        copyBoard = generateAdjacentCells(row - 1, col + 1, copyBoard);
+      } else {
+        copyBoard[row - 1][col + 1] = {
+          ...topRight,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  if (midLeft) {
+    if (!midLeft.isVisible && midLeft.bombs !== -1) {
+      if (midLeft.bombs === 0) {
+        copyBoard = generateAdjacentCells(row, col - 1, copyBoard);
+      } else {
+        copyBoard[row][col - 1] = {
+          ...midLeft,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  if (midRight) {
+    if (!midRight.isVisible && midRight.bombs !== -1) {
+      if (midRight.bombs === 0) {
+        copyBoard = generateAdjacentCells(row, col + 1, copyBoard);
+      } else {
+        copyBoard[row][col + 1] = {
+          ...midRight,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  if (bottomLeft) {
+    if (!bottomLeft.isVisible && bottomLeft.bombs !== -1) {
+      if (bottomLeft.bombs === 0) {
+        copyBoard = generateAdjacentCells(row + 1, col - 1, copyBoard);
+      } else {
+        copyBoard[row + 1][col - 1] = {
+          ...bottomLeft,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  if (bottomMid) {
+    if (!bottomMid.isVisible && bottomMid.bombs !== -1) {
+      if (bottomMid.bombs === 0) {
+        copyBoard = generateAdjacentCells(row + 1, col, copyBoard);
+      } else {
+        copyBoard[row + 1][col] = {
+          ...bottomMid,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  if (bottomRight) {
+    if (!bottomRight.isVisible && bottomRight.bombs !== -1) {
+      if (bottomRight.bombs === 0) {
+        copyBoard = generateAdjacentCells(row + 1, col + 1, copyBoard);
+      } else {
+        copyBoard[row + 1][col + 1] = {
+          ...bottomRight,
+          isVisible: true,
+        }
+      }
+    }
+  }
+
+  return copyBoard;
 }

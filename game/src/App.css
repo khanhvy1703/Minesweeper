@@ -11,10 +11,12 @@
   width: 30px;
   height: 30px;
   background-color: #7b7b7b;
+  opacity: 0.7;
 }
 
 .cell:active {
   border: 2px solid grey;
+  opacity: 1;
 }
 
 .box-shadow {

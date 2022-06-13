@@ -14,3 +14,10 @@ export type CellType = {
   isFlag?: boolean,
   isVisible?: boolean,
 }
+
+export enum Face {
+  none,
+  smile, 
+  sad,
+  suprise,
+}

@@ -10,9 +10,11 @@ interface ICellProps {
   bombs: number;
   isFlag?: boolean;
   isVisible?: boolean;
+  onClick(rowIndex:number, colIndex:number): (e:React.MouseEvent) => void;
+  onFlagClick(rowIndex:number, colIndex:number): (e:React.MouseEvent) => void;
 }
 
-const Cell = ({ row, col, bombs, isFlag, isVisible }: ICellProps) => {
+const Cell = ({ row, col, bombs, onClick, onFlagClick, isFlag, isVisible }: ICellProps) => {
   const renderVisibleContent = () => {
     if (isVisible) {
       if (bombs === -1) {
@@ -33,13 +35,15 @@ const Cell = ({ row, col, bombs, isFlag, isVisible }: ICellProps) => {
   };
 
   return (
-    <Box
+    <div
       className={`${
         isVisible ? 'bomb-num-container box-shadow center' : 'cell box-shadow'
       }`}
+      onClick={onClick(row, col)}
+      onContextMenu={onFlagClick(row, col)}
     >
       {renderVisibleContent()}
-    </Box>
+    </div>
   );
 };
 
