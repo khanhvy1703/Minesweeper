@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text } from '@chakra-ui/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faBomb,
   faFaceSmile,
-  faFaceSadCry,
+  faFaceDizzy,
   faFaceSurprise,
+  faFaceGrinSquint,
 } from '@fortawesome/free-solid-svg-icons';
-import { generateAdjacentCells, generateBoard } from '../utils';
+import { generateAdjacentCells, generateBoard, isSafeCellExisting, showAllBombs } from '../utils';
 import {
   INTERMEDIATE_ROW,
   INTERMEDIATE_COLUMN,
@@ -17,23 +17,26 @@ import Cell from './Cell';
 import Num from './Num';
 import { CellType, Face } from '../utils/types';
 
-function Game() {
+const Game = () => {
+  const boardRef = useRef(null);
   const [board, setBoard] = useState<CellType[][]>(
     generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS)
   );
-  const [faces, setFaces] = useState<Face>(Face.smile);
+  const [faces, setFaces] = useState<Face>(Face.start);
   const [numBombs, setNumBombs] = useState<number>(INTERMEDIATE_BOMBS);
   const [timer, setTimer] = useState<number>(0);
   const [start, setStart] = useState<boolean>(false);
   const [gameOver, setGameOver] = useState<boolean>(false);
+  const [win, setWin] = useState<boolean>(false);
 
   useEffect(() => {
     const handleMouseDown = () => {
-      setFaces(Face.sad);
+      setFaces(Face.suprise);
+      
     };
 
     const handleMouseUp = () => {
-      setFaces(Face.smile);
+      setFaces(Face.start);
     };
 
     window.addEventListener('mousedown', handleMouseDown);
@@ -57,6 +60,21 @@ function Game() {
     }
   }, [start, timer]);
 
+  useEffect(() => {
+    if (gameOver) {
+      setFaces(Face.lose);
+      setStart(false);
+      setBoard(showAllBombs(board));
+    }
+  }, [gameOver, board]);
+
+  useEffect(() => {
+    if (win) {
+      setFaces(Face.win);
+      setStart(false);
+    }
+  }, [win]);
+
   const handleCellClick = (row: number, col: number) => (): void => {
     if (!start) {
       setStart(true);
@@ -71,7 +89,10 @@ function Game() {
       copyBoard[row][col] = {
         ...currentCell,
         isVisible: true,
+        isBombClicked: true,
       };
+      setGameOver(true);
+      return;
     } else if (currentCell.bombs === 0) {
       copyBoard = generateAdjacentCells(row, col, board);
     } else {
@@ -80,6 +101,11 @@ function Game() {
         isVisible: true,
       };
     }
+    if(!isSafeCellExisting(board)) {
+      setWin(true);
+      return;
+    }
+
     setBoard(copyBoard);
   };
 
@@ -96,25 +122,41 @@ function Game() {
             ...currentCell,
             isFlag: true,
           };
+          setNumBombs(numBombs - 1);
         } else {
           copyBoard[row][col] = {
             ...currentCell,
             isFlag: false,
           };
+          setNumBombs(numBombs + 1);
         }
       }
       setBoard(copyBoard);
     };
 
-  const handleFaceClick = (e: React.MouseEvent): void => {
-    e.preventDefault();
-    if (start) {
-      setStart(false);
-      setTimer(0);
-      setBoard(
-        generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS)
-      );
-      setNumBombs(INTERMEDIATE_BOMBS);
+  const handleFaceClick = (): void => {
+    setStart(false);
+    setTimer(0);
+    setBoard(
+      generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS)
+    );
+    setNumBombs(INTERMEDIATE_BOMBS);
+    setFaces(Face.start);
+    setGameOver(false);
+    setWin(false);
+  };
+
+  const renderFaces = () => {
+    switch (faces) {
+      case Face.suprise:
+        return <FontAwesomeIcon icon={faFaceSurprise} fontSize='25px' />;
+      case Face.lose:
+        return <FontAwesomeIcon icon={faFaceDizzy} fontSize='25px' />;
+      case Face.win:
+        return <FontAwesomeIcon icon={faFaceGrinSquint} fontSize='25px' />;
+      case Face.start:
+      default:
+        return <FontAwesomeIcon icon={faFaceSmile} fontSize='25px' />;
     }
   };
 
@@ -133,6 +175,7 @@ function Game() {
                   isVisible={column.isVisible}
                   onClick={handleCellClick}
                   onFlagClick={handleCellFlagClick}
+                  isBombClicked={column.isBombClicked}
                 />
               </Box>
             );
@@ -143,41 +186,27 @@ function Game() {
   };
 
   return (
-    <div className='App'>
-      <Heading as='h2' size='xl' display='flex' flexDirection='row'>
-        <Text marginLeft='20px' marginRight='20px'>
-          MINESWEEPER
-        </Text>
-      </Heading>
-
-      <Box display='flex' flexDirection='column' marginTop='10px'>
-        <Box display='flex' justifyContent='space-between' flexDirection='row'>
-          <Num num={numBombs} />
-          <Box
-            width='35px'
-            height='35px'
-            backgroundColor='lightgray'
-            justifyContent='center'
-            alignItems='center'
-            display='flex'
-            className='box-shadow click'
-            onClick={handleFaceClick}
-          >
-            {faces === Face.smile ? (
-              <FontAwesomeIcon icon={faFaceSmile} fontSize='25px' />
-            ) : Face.sad ? (
-              <FontAwesomeIcon icon={faFaceSadCry} fontSize='25px' />
-            ) : (
-              <FontAwesomeIcon icon={faFaceSurprise} fontSize='25px' />
-            )}
-          </Box>
-          <Num num={timer} />
+    <Box display='flex' flexDirection='column' marginTop='10px'>
+      <Box display='flex' justifyContent='space-between' flexDirection='row'>
+        <Num num={numBombs} />
+        <Box
+          width='35px'
+          height='35px'
+          backgroundColor='lightgray'
+          justifyContent='center'
+          alignItems='center'
+          display='flex'
+          className='box-shadow click'
+          onClick={handleFaceClick}
+        >
+          {renderFaces()}
         </Box>
-
-        <Box>{renderBoard()}</Box>
+        <Num num={timer} />
       </Box>
-    </div>
+
+      <Box ref={boardRef} >{renderBoard()}</Box>
+    </Box>
   );
-}
+};
 
 export default Game;

@@ -13,11 +13,13 @@ export type CellType = {
   bombs: number, 
   isFlag?: boolean,
   isVisible?: boolean,
+  isBombClicked?:boolean,
 }
 
 export enum Face {
   none,
-  smile, 
-  sad,
+  start, 
+  lose,
+  win,
   suprise,
 }

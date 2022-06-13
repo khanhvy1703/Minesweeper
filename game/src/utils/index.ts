@@ -61,8 +61,8 @@ export const generateBoard = (maxRow:number, maxCol:number, maxBomb:number):Cell
         ...currentCell,
         bombs: -1,
       }
+      bombsAdded++;
     }
-    bombsAdded++;
   } 
 
   // generate the numbers 
@@ -235,4 +235,37 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   }
 
   return copyBoard;
+}
+
+export const showAllBombs = (board:CellType[][]):CellType[][] => {
+  let copyBoard = [...board];
+  board.map((row:CellType[], rowIndex:number) => {
+    return row.map((col:CellType, colIndex:number) => {
+      const currentCell = board[rowIndex][colIndex];
+      if (currentCell.bombs === -1) {
+        return copyBoard[rowIndex][colIndex] = {
+          ...currentCell, 
+          isVisible: currentCell.isFlag ? false : true,
+        }
+      }
+      return col;
+    })
+  })
+
+  return copyBoard;
+}
+
+export const isSafeCellExisting = (board:CellType[][]):boolean => {
+  let isExisting = false;
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      const currentCell = board[i][j];
+      if (!currentCell.isVisible && currentCell.bombs !== -1) {
+        isExisting = true;
+        break;
+      }
+    }
+  }
+  return isExisting;
 }
