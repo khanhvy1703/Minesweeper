@@ -1,5 +1,5 @@
-import { EIGHT_COLOR, FIVE_COLOR, FOUR_COLOR, ONE_COLOR, SEVEN_COLOR, SIX_COLOR, THREE_COLOR, TWO_COLOR } from "./constant";
-import { CellType } from "./types";
+import { BEGINNER_BOMBS, BEGINNER_COLUMN, BEGINNER_ROW, EIGHT_COLOR, EXPERT_BOMBS, EXPERT_COLUMN, EXPERT_ROW, FIVE_COLOR, FOUR_COLOR, INTERMEDIATE_BOMBS, INTERMEDIATE_COLUMN, INTERMEDIATE_ROW, ONE_COLOR, SEVEN_COLOR, SIX_COLOR, THREE_COLOR, TWO_COLOR } from "./constant";
+import { CellType, Level } from "./types";
 
 const generateRandomNum = (max:number) => {
   return Math.floor(Math.random() * max);
@@ -9,6 +9,16 @@ const getAdjacentCell = (row:number, col:number, board:CellType[][]):CellType | 
   const maxCol = board.length;
   const maxRow = board[0].length;
   return row < 0 || col < 0 || row >= maxRow || col >= maxCol ? null : board[row][col];
+}
+
+export const generateBoardByLevel = (level:Level):CellType[][] => {
+  switch(level) {
+    case Level.intermediate: return generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS);
+    case Level.expert: return generateBoard(EXPERT_ROW, EXPERT_COLUMN, EXPERT_BOMBS);
+    case Level.beginnner: 
+    default: 
+      return generateBoard(BEGINNER_ROW, BEGINNER_COLUMN, BEGINNER_BOMBS);
+  }
 }
 
 export const generateNumColor = (bombs: number) => {
@@ -272,6 +282,10 @@ export const isSafeCellExisting = (board:CellType[][]):boolean => {
 
 export const showTimer = (timer:number):string => {
   let time:string = '';
+  let hours:number = 0;
+  let min:number = 0;
+  let sec:number = 0;
+
 
   return time;
 }

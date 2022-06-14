@@ -2,9 +2,13 @@ export const BEGINNER_ROW = 8;
 export const BEGINNER_COLUMN = 8;
 export const BEGINNER_BOMBS = 10;
 
-export const INTERMEDIATE_ROW = 8;
-export const INTERMEDIATE_COLUMN = 8;
-export const INTERMEDIATE_BOMBS = 10;
+export const INTERMEDIATE_ROW = 16;
+export const INTERMEDIATE_COLUMN = 16;
+export const INTERMEDIATE_BOMBS = 40;
+
+export const EXPERT_ROW = 16;
+export const EXPERT_COLUMN = 32;
+export const EXPERT_BOMBS = 99;
 
 // NUMBERS' COLORS
 export const ONE_COLOR = 'blue';

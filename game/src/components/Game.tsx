@@ -7,21 +7,22 @@ import {
   faFaceSurprise,
   faFaceGrinSquint,
 } from '@fortawesome/free-solid-svg-icons';
-import { generateAdjacentCells, generateBoard, isSafeCellExisting, showAllBombs } from '../utils';
 import {
-  INTERMEDIATE_ROW,
-  INTERMEDIATE_COLUMN,
+  generateAdjacentCells,
+  generateBoardByLevel,
+  isSafeCellExisting,
+  showAllBombs,
+} from '../utils';
+import {
   INTERMEDIATE_BOMBS,
 } from '../utils/constant';
 import Cell from './Cell';
 import Num from './Num';
-import { CellType, Face } from '../utils/types';
+import { CellType, Face, Level } from '../utils/types';
 
 const Game = () => {
   const boardRef = useRef(null);
-  const [board, setBoard] = useState<CellType[][]>(
-    generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS)
-  );
+  const [board, setBoard] = useState<CellType[][]>(generateBoardByLevel(Level.intermediate));
   const [faces, setFaces] = useState<Face>(Face.start);
   const [numBombs, setNumBombs] = useState<number>(INTERMEDIATE_BOMBS);
   const [timer, setTimer] = useState<number>(0);
@@ -30,20 +31,12 @@ const Game = () => {
   const [win, setWin] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleMouseDown = () => {
-      setFaces(Face.suprise);
-      
-    };
-
     const handleMouseUp = () => {
       setFaces(Face.start);
     };
 
-    window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
-
     return () => {
-      window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
@@ -82,6 +75,7 @@ const Game = () => {
 
     const currentCell = board[row][col];
     let copyBoard = [...board];
+
     if (currentCell.isFlag || currentCell.isVisible) {
       return;
     }
@@ -101,7 +95,20 @@ const Game = () => {
         isVisible: true,
       };
     }
-    if(!isSafeCellExisting(board)) {
+
+    // check if win
+    if (!isSafeCellExisting(board)) {
+      copyBoard = copyBoard.map((row) => {
+        return row.map((col) => {
+          if (col.bombs === -1) {
+            return {
+              ...col,
+              isFlag: true,
+            };
+          }
+          return col;
+        });
+      });
       setWin(true);
       return;
     }
@@ -137,9 +144,7 @@ const Game = () => {
   const handleFaceClick = (): void => {
     setStart(false);
     setTimer(0);
-    setBoard(
-      generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS)
-    );
+    setBoard(generateBoardByLevel(Level.intermediate));
     setNumBombs(INTERMEDIATE_BOMBS);
     setFaces(Face.start);
     setGameOver(false);
@@ -204,7 +209,7 @@ const Game = () => {
         <Num num={timer} />
       </Box>
 
-      <Box ref={boardRef} >{renderBoard()}</Box>
+      <Box ref={boardRef}>{renderBoard()}</Box>
     </Box>
   );
 };
