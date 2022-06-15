@@ -13,7 +13,7 @@ function App() {
         </Text>
       </Heading>
 
-      <Game level={Level.beginner} />
+      <Game level={Level.expert} />
     </div>
   );
 }

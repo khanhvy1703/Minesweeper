@@ -7,7 +7,7 @@ export const INTERMEDIATE_COLUMN = 16;
 export const INTERMEDIATE_BOMBS = 40;
 
 export const EXPERT_ROW = 16;
-export const EXPERT_COLUMN = 32;
+export const EXPERT_COLUMN = 30;
 export const EXPERT_BOMBS = 99;
 
 // NUMBERS' COLORS

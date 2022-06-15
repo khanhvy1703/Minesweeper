@@ -24,8 +24,8 @@ const generateRandomNum = (max:number) => {
 }
 
 const getAdjacentCell = (row:number, col:number, board:CellType[][]):CellType | null => {
-  const maxCol = board.length;
-  const maxRow = board[0].length;
+  const maxRow = board.length;
+  const maxCol = board[0].length;
   return row < 0 || col < 0 || row >= maxRow || col >= maxCol ? null : board[row][col];
 }
 
