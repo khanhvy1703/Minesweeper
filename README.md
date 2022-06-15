@@ -4,4 +4,4 @@
 - EXPERT: 30X16 (99 bombs)
 
 ### BUGS need to be fixed: 
-- currently can't find any bugs :)))
+- out of bound for exper level
