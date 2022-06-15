@@ -24,8 +24,6 @@
 
 .click:hover {
   cursor: pointer;
-  box-shadow: none;
-  border: 3px solid black;
 }
 
 .bomb-num-container {
@@ -38,4 +36,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.cell-win-over {
+  pointer-events: none;
+}
+
+.flag-wrong-bg {
+  background-color: #fda5b4 !important;
+}
+
+.font-style {
+  font-weight: 500;
 }

@@ -11,20 +11,23 @@ import {
   generateAdjacentCells,
   generateBoardByLevel,
   isSafeCellExisting,
-  showAllBombs,
+  showAllFlags,
+  showGameOverBoard,
 } from '../utils';
-import {
-  INTERMEDIATE_BOMBS,
-} from '../utils/constant';
 import Cell from './Cell';
 import Num from './Num';
-import { CellType, Face, Level } from '../utils/types';
+import { BoardType, CellType, Face, Level } from '../utils/types';
 
-const Game = () => {
+interface IGameProps {
+  level: Level;
+}
+
+const Game = ({ level }: IGameProps) => {
   const boardRef = useRef(null);
-  const [board, setBoard] = useState<CellType[][]>(generateBoardByLevel(Level.intermediate));
+  const generateBoard: BoardType = generateBoardByLevel(level);
+  const [board, setBoard] = useState<CellType[][]>(generateBoard.board);
   const [faces, setFaces] = useState<Face>(Face.start);
-  const [numBombs, setNumBombs] = useState<number>(INTERMEDIATE_BOMBS);
+  const [numBombs, setNumBombs] = useState<number>(generateBoard.bombs);
   const [timer, setTimer] = useState<number>(0);
   const [start, setStart] = useState<boolean>(false);
   const [gameOver, setGameOver] = useState<boolean>(false);
@@ -39,7 +42,7 @@ const Game = () => {
     return () => {
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [faces]);
 
   useEffect(() => {
     if (start) {
@@ -57,16 +60,17 @@ const Game = () => {
     if (gameOver) {
       setFaces(Face.lose);
       setStart(false);
-      setBoard(showAllBombs(board));
+      setBoard(showGameOverBoard(board));
     }
-  }, [gameOver, board]);
+  }, [gameOver, board, faces, start]);
 
   useEffect(() => {
     if (win) {
       setFaces(Face.win);
       setStart(false);
+      setBoard(showAllFlags(board));
     }
-  }, [win]);
+  }, [board, win, faces, start]);
 
   const handleCellClick = (row: number, col: number) => (): void => {
     if (!start) {
@@ -98,17 +102,6 @@ const Game = () => {
 
     // check if win
     if (!isSafeCellExisting(board)) {
-      copyBoard = copyBoard.map((row) => {
-        return row.map((col) => {
-          if (col.bombs === -1) {
-            return {
-              ...col,
-              isFlag: true,
-            };
-          }
-          return col;
-        });
-      });
       setWin(true);
       return;
     }
@@ -144,8 +137,8 @@ const Game = () => {
   const handleFaceClick = (): void => {
     setStart(false);
     setTimer(0);
-    setBoard(generateBoardByLevel(Level.intermediate));
-    setNumBombs(INTERMEDIATE_BOMBS);
+    setBoard(generateBoard.board);
+    setNumBombs(generateBoard.bombs);
     setFaces(Face.start);
     setGameOver(false);
     setWin(false);
@@ -178,9 +171,11 @@ const Game = () => {
                   bombs={column.bombs}
                   isFlag={column.isFlag}
                   isVisible={column.isVisible}
+                  isBombClicked={column.isBombClicked}
+                  isDisable={column.isDisable}
+                  isFlagWrong={column.isFlagWrong}
                   onClick={handleCellClick}
                   onFlagClick={handleCellFlagClick}
-                  isBombClicked={column.isBombClicked}
                 />
               </Box>
             );

@@ -1,7 +1,12 @@
 export enum Level {
-  beginnner, 
+  beginner, 
   intermediate,
   expert,
+}
+
+export type BoardType =  {
+  board: CellType[][],
+  bombs: number,
 }
 
 /**
@@ -11,9 +16,11 @@ export enum Level {
 export type CellType = {
   key:number,
   bombs: number, 
+  isDisable?:boolean,
   isFlag?: boolean,
   isVisible?: boolean,
   isBombClicked?:boolean,
+  isFlagWrong?:boolean,
 }
 
 export enum Face {

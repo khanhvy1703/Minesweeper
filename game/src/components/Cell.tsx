@@ -3,7 +3,11 @@ import { Box, Text } from '@chakra-ui/react';
 import { faBomb, faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { generateNumColor } from '../utils';
-import { BOMB_SELECTED_COLOR } from '../utils/constant';
+import {
+  BOMB_SELECTED_COLOR,
+  FLAG_ON_NUM_COLOR,
+  VISIBLE_BG,
+} from '../utils/constant';
 
 interface ICellProps {
   row: number;
@@ -12,8 +16,8 @@ interface ICellProps {
   isFlag?: boolean;
   isVisible?: boolean;
   isBombClicked?: boolean;
-  isFlagWrong?:boolean;
-  isDisable?:boolean
+  isDisable?: boolean;
+  isFlagWrong?: boolean;
   onClick(rowIndex: number, colIndex: number): (e: React.MouseEvent) => void;
   onFlagClick(
     rowIndex: number,
@@ -28,8 +32,8 @@ const Cell = ({
   isFlag,
   isVisible,
   isBombClicked,
-  isFlagWrong,
   isDisable,
+  isFlagWrong,
   onClick,
   onFlagClick,
 }: ICellProps) => {
@@ -52,14 +56,33 @@ const Cell = ({
     return <></>;
   };
 
+  const renderClassName = (): string => {
+    if (isVisible) {
+      return 'bomb-num-container box-shadow center';
+    }
+    if (isDisable) {
+      return 'cell box-shadow cell-win-over';
+    } else {
+      return 'cell box-shadow';
+    }
+  };
+
+  const gameOverBg = (): string => {
+    if (isFlagWrong) {
+      return FLAG_ON_NUM_COLOR;
+    } else if (isBombClicked) {
+      return BOMB_SELECTED_COLOR;
+    } else {
+      return VISIBLE_BG;
+    }
+  };
+
   return (
     <Box
-      className={`${
-        isVisible ? 'bomb-num-container box-shadow center' : 'cell box-shadow'
-      }`}
+      className={renderClassName()}
       onClick={onClick(row, col)}
       onContextMenu={onFlagClick(row, col)}
-      backgroundColor={isBombClicked ? BOMB_SELECTED_COLOR : '#aca9a9'}
+      backgroundColor={gameOverBg()}
     >
       {renderVisibleContent()}
     </Box>

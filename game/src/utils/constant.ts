@@ -22,3 +22,4 @@ export const EIGHT_COLOR = '#66696b';
 
 export const FLAG_ON_NUM_COLOR = '#fda5b4';
 export const BOMB_SELECTED_COLOR = '#c80815';
+export const VISIBLE_BG = '#aca9a9';

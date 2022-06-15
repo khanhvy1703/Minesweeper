@@ -1,5 +1,23 @@
-import { BEGINNER_BOMBS, BEGINNER_COLUMN, BEGINNER_ROW, EIGHT_COLOR, EXPERT_BOMBS, EXPERT_COLUMN, EXPERT_ROW, FIVE_COLOR, FOUR_COLOR, INTERMEDIATE_BOMBS, INTERMEDIATE_COLUMN, INTERMEDIATE_ROW, ONE_COLOR, SEVEN_COLOR, SIX_COLOR, THREE_COLOR, TWO_COLOR } from "./constant";
-import { CellType, Level } from "./types";
+import { 
+  BEGINNER_BOMBS, 
+  BEGINNER_COLUMN, 
+  BEGINNER_ROW, 
+  EIGHT_COLOR, 
+  EXPERT_BOMBS, 
+  EXPERT_COLUMN, 
+  EXPERT_ROW, 
+  FIVE_COLOR, 
+  FOUR_COLOR, 
+  INTERMEDIATE_BOMBS, 
+  INTERMEDIATE_COLUMN, 
+  INTERMEDIATE_ROW, 
+  ONE_COLOR, 
+  SEVEN_COLOR, 
+  SIX_COLOR, 
+  THREE_COLOR, 
+  TWO_COLOR 
+} from "./constant";
+import { BoardType, CellType, Level } from "./types";
 
 const generateRandomNum = (max:number) => {
   return Math.floor(Math.random() * max);
@@ -11,13 +29,13 @@ const getAdjacentCell = (row:number, col:number, board:CellType[][]):CellType | 
   return row < 0 || col < 0 || row >= maxRow || col >= maxCol ? null : board[row][col];
 }
 
-export const generateBoardByLevel = (level:Level):CellType[][] => {
+export const generateBoardByLevel = (level:Level):BoardType => {
   switch(level) {
-    case Level.intermediate: return generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS);
-    case Level.expert: return generateBoard(EXPERT_ROW, EXPERT_COLUMN, EXPERT_BOMBS);
-    case Level.beginnner: 
+    case Level.intermediate: return {board: generateBoard(INTERMEDIATE_ROW, INTERMEDIATE_COLUMN, INTERMEDIATE_BOMBS), bombs: INTERMEDIATE_BOMBS};
+    case Level.expert: return {board: generateBoard(EXPERT_ROW, EXPERT_COLUMN, EXPERT_BOMBS), bombs: EXPERT_BOMBS};
+    case Level.beginner: 
     default: 
-      return generateBoard(BEGINNER_ROW, BEGINNER_COLUMN, BEGINNER_BOMBS);
+      return {board: generateBoard(BEGINNER_ROW, BEGINNER_COLUMN, BEGINNER_BOMBS), bombs: BEGINNER_BOMBS}
   }
 }
 
@@ -143,6 +161,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (topLeft) {
     if (!topLeft.isVisible && topLeft.bombs !== -1) {
       if (topLeft.bombs === 0) {
+        copyBoard[row - 1][col - 1] = {
+          ...topLeft,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row - 1, col - 1, copyBoard);
       } else {
         copyBoard[row-1][col-1] = {
@@ -156,6 +178,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (topMid) {
     if (!topMid.isVisible && topMid.bombs !== -1) {
       if (topMid.bombs === 0) {
+        copyBoard[row - 1][col] = {
+          ...topMid,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row - 1, col, copyBoard);
       } else {
         copyBoard[row-1][col] = {
@@ -169,6 +195,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (topRight) {
     if (!topRight.isVisible && topRight.bombs !== -1) {
       if (topRight.bombs === 0) {
+        copyBoard[row - 1][col + 1] = {
+          ...topRight,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row - 1, col + 1, copyBoard);
       } else {
         copyBoard[row - 1][col + 1] = {
@@ -182,6 +212,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (midLeft) {
     if (!midLeft.isVisible && midLeft.bombs !== -1) {
       if (midLeft.bombs === 0) {
+        copyBoard[row][col - 1] = {
+          ...midLeft,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row, col - 1, copyBoard);
       } else {
         copyBoard[row][col - 1] = {
@@ -195,6 +229,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (midRight) {
     if (!midRight.isVisible && midRight.bombs !== -1) {
       if (midRight.bombs === 0) {
+        copyBoard[row][col + 1] = {
+          ...midRight,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row, col + 1, copyBoard);
       } else {
         copyBoard[row][col + 1] = {
@@ -208,6 +246,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (bottomLeft) {
     if (!bottomLeft.isVisible && bottomLeft.bombs !== -1) {
       if (bottomLeft.bombs === 0) {
+        copyBoard[row + 1][col - 1] = {
+          ...bottomLeft,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row + 1, col - 1, copyBoard);
       } else {
         copyBoard[row + 1][col - 1] = {
@@ -221,6 +263,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (bottomMid) {
     if (!bottomMid.isVisible && bottomMid.bombs !== -1) {
       if (bottomMid.bombs === 0) {
+        copyBoard[row + 1][col] = {
+          ...bottomMid,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row + 1, col, copyBoard);
       } else {
         copyBoard[row + 1][col] = {
@@ -234,6 +280,10 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   if (bottomRight) {
     if (!bottomRight.isVisible && bottomRight.bombs !== -1) {
       if (bottomRight.bombs === 0) {
+        copyBoard[row + 1][col + 1] = {
+          ...bottomRight,
+          isFlag: false,
+        }
         copyBoard = generateAdjacentCells(row + 1, col + 1, copyBoard);
       } else {
         copyBoard[row + 1][col + 1] = {
@@ -247,7 +297,7 @@ export const generateAdjacentCells = (row:number, col:number, board:CellType[][]
   return copyBoard;
 }
 
-export const showAllBombs = (board:CellType[][]):CellType[][] => {
+export const showGameOverBoard = (board:CellType[][]):CellType[][] => {
   let copyBoard = [...board];
   board.map((row:CellType[], rowIndex:number) => {
     return row.map((col:CellType, colIndex:number) => {
@@ -258,10 +308,41 @@ export const showAllBombs = (board:CellType[][]):CellType[][] => {
           isVisible: currentCell.isFlag ? false : true,
         }
       }
+      if (currentCell.bombs !== -1 && currentCell.isFlag) {
+        return copyBoard[rowIndex][colIndex] = {
+          ...currentCell, 
+          isFlagWrong: true,
+        }
+      }
+      if (currentCell.bombs !== -1 && !currentCell.isVisible) {
+        return copyBoard[rowIndex][colIndex] = {
+          ...currentCell, 
+          isDisable: true,
+        }
+      }
       return col;
     })
   })
 
+  return copyBoard;
+}
+
+export const showAllFlags = (board:CellType[][]):CellType[][] => {
+  let copyBoard = [...board];
+  board.map((row:CellType[], rowIndex:number) => {
+    return row.map((col:CellType, colIndex:number) => {
+      const currentCell = board[rowIndex][colIndex];
+      if (currentCell.bombs === -1) {
+        copyBoard[rowIndex][colIndex] = {
+          ...currentCell,
+          isFlag: true,
+          isDisable: true,
+        }
+      }
+      return col;
+    })
+  })
+  console.log(copyBoard)
   return copyBoard;
 }
 
@@ -278,14 +359,4 @@ export const isSafeCellExisting = (board:CellType[][]):boolean => {
     }
   }
   return isExisting;
-}
-
-export const showTimer = (timer:number):string => {
-  let time:string = '';
-  let hours:number = 0;
-  let min:number = 0;
-  let sec:number = 0;
-
-
-  return time;
 }

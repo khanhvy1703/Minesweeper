@@ -1,6 +1,8 @@
+import React from 'react';
 import { Heading, Text } from '@chakra-ui/react';
 import './App.css';
 import Game from './components/Game';
+import { Level } from './utils/types';
 
 function App() {
   return (
@@ -10,7 +12,8 @@ function App() {
           MINESWEEPER
         </Text>
       </Heading>
-      <Game />
+
+      <Game level={Level.beginner} />
     </div>
   );
 }
