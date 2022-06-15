@@ -306,12 +306,14 @@ export const showGameOverBoard = (board:CellType[][]):CellType[][] => {
         return copyBoard[rowIndex][colIndex] = {
           ...currentCell, 
           isVisible: currentCell.isFlag ? false : true,
+          isDisable: true,
         }
       }
       if (currentCell.bombs !== -1 && currentCell.isFlag) {
         return copyBoard[rowIndex][colIndex] = {
           ...currentCell, 
           isFlagWrong: true,
+          isDisable: true,
         }
       }
       if (currentCell.bombs !== -1 && !currentCell.isVisible) {

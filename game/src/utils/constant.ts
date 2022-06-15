@@ -1,3 +1,4 @@
+// LEVELS
 export const BEGINNER_ROW = 8;
 export const BEGINNER_COLUMN = 8;
 export const BEGINNER_BOMBS = 10;
@@ -20,6 +21,10 @@ export const SIX_COLOR = '#4278a1';
 export const SEVEN_COLOR = 'black';
 export const EIGHT_COLOR = '#66696b';
 
+// BG COLOR
 export const FLAG_ON_NUM_COLOR = '#fda5b4';
 export const BOMB_SELECTED_COLOR = '#c80815';
 export const VISIBLE_BG = '#aca9a9';
+
+// TIME 
+export const ONE_THOUSAND = 1000;

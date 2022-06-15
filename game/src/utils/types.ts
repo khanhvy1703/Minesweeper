@@ -2,6 +2,7 @@ export enum Level {
   beginner, 
   intermediate,
   expert,
+
 }
 
 export type BoardType =  {
@@ -24,7 +25,6 @@ export type CellType = {
 }
 
 export enum Face {
-  none,
   start, 
   lose,
   win,

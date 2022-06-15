@@ -26,6 +26,11 @@
   cursor: pointer;
 }
 
+.level-click:hover {
+  cursor: pointer;
+  background-color: bisque;
+}
+
 .bomb-num-container {
   width: 30px;
   height: 30px;
@@ -48,4 +53,8 @@
 
 .font-style {
   font-weight: 500;
+}
+
+.num-font {
+  font-family: 'VT323', monospace !important;
 }

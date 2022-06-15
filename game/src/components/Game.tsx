@@ -17,6 +17,7 @@ import {
 import Cell from './Cell';
 import Num from './Num';
 import { BoardType, CellType, Face, Level } from '../utils/types';
+import { ONE_THOUSAND } from '../utils/constant';
 
 interface IGameProps {
   level: Level;
@@ -48,7 +49,7 @@ const Game = ({ level }: IGameProps) => {
     if (start) {
       const time = setInterval(() => {
         setTimer(timer + 1);
-      }, 1000);
+      }, ONE_THOUSAND);
 
       return () => {
         clearInterval(time);
@@ -113,6 +114,10 @@ const Game = ({ level }: IGameProps) => {
     (row: number, col: number) =>
     (e: React.MouseEvent): void => {
       e.preventDefault();
+      if (!start) {
+        setStart(true);
+      }
+      
       let copyBoard = [...board];
       const currentCell = board[row][col];
 
@@ -188,7 +193,7 @@ const Game = ({ level }: IGameProps) => {
   return (
     <Box display='flex' flexDirection='column' marginTop='10px'>
       <Box display='flex' justifyContent='space-between' flexDirection='row'>
-        <Num num={numBombs} />
+        <Num num={numBombs} isBomb={true} />
         <Box
           width='35px'
           height='35px'
@@ -203,7 +208,6 @@ const Game = ({ level }: IGameProps) => {
         </Box>
         <Num num={timer} />
       </Box>
-
       <Box ref={boardRef}>{renderBoard()}</Box>
     </Box>
   );
