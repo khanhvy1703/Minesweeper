@@ -1,7 +1,9 @@
 ### RULES
+There are 3 difficulties for players to choose: 
 - BEGINNER: 8x8 (10 bombs)
 - INTERMEDIATE: 16x16 (40 bombs)
 - EXPERT: 30X16 (99 bombs)
+- CUSTOM: will be update soon.
 
 ### BUGS need to be fixed: 
 - update numBombs reflecting to num of flags in the board.
