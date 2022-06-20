@@ -8,6 +8,9 @@ There are 3 difficulties for players to choose:
 ### BUGS need to be fixed: 
 - update numBombs reflecting to num of flags in the board.
 
+### REFERENCES: 
+- Logic of the game is based from here: https://dash.harvard.edu/bitstream/handle/1/14398552/BECERRA-SENIORTHESIS-2015.pdf
+
 ------------------------------------------------------------------------------------------------------------------------------------------
 
 # Getting Started with Create React App
